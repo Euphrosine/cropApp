@@ -1,13 +1,19 @@
 <?php
 session_start();
 // Connection credentials.
-$DATABASE_HOST = 'localhost';
-$DATABASE_USER = 'u191905341_crops_user';
-$DATABASE_PASS = 'Crops_user27';
-$DATABASE_NAME = 'u191905341_crops';
+$DATABASE_HOST = 'mysql-153418-0.cloudclusters.net';
+$DATABASE_USER = 'admin';
+$DATABASE_PASS = 'admin123';
+$DATABASE_NAME = 'crop';
 // Try and connect using the info above.
 $conn = new mysqli($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME);
 // Check connection
+// 'ENGINE': 'django.db.backends.mysql',
+// 'NAME': 'kitchenproject',
+// 'USER': 'admin',
+// 'PASSWORD': 'admin123',
+// 'HOST': 'mysql-153418-0.cloudclusters.net',
+// 'PORT': '19069',
 if ($conn->connect_errno) {
     die("Connection failed: " . $conn->connect_error);
 }
