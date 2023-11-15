@@ -1,0 +1,274 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Prediction Pannel</title>
+  <!-- Google Font: Source Sans Pro -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="{{url_for('static', filename = 'plugins/fontawesome-free/css/all.min.css')}}">
+  <!-- daterange picker -->
+  <link rel="stylesheet" href="{{url_for('static', filename = 'plugins/daterangepicker/daterangepicker.css')}}">
+  <!-- iCheck for checkboxes and radio inputs -->
+  <link rel="stylesheet" href="{{url_for('static', filename = 'plugins/icheck-bootstrap/icheck-bootstrap.min.css')}}">
+  <!-- Bootstrap Color Picker -->
+  <link rel="stylesheet" href="{{url_for('static', filename = 'plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.min.css')}}">
+  <!-- Tempusdominus Bootstrap 4 -->
+  <link rel="stylesheet" href="{{url_for('static', filename = 'plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css')}}">
+  <!-- Select2 -->
+  <link rel="stylesheet" href="{{url_for('static', filename = '/plugins/select2/css/select2.min.css')}}">
+  <link rel="stylesheet" href="{{url_for('static', filename = 'plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css')}}">
+  <!-- Bootstrap4 Duallistbox -->
+  <link rel="stylesheet" href="{{url_for('static', filename = 'plugins/bootstrap4-duallistbox/bootstrap-duallistbox.min.css')}}">
+  <!-- BS Stepper -->
+  <link rel="stylesheet" href="{{url_for('static', filename = 'plugins/bs-stepper/css/bs-stepper.min.css')}}">
+  <link rel="stylesheet" href="{{url_for('static', filename = 'plugins/dropzone/min/dropzone.min.css')}}">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="{{url_for('static', filename = 'dist/css/adminlte.min.css')}}">
+
+
+  
+</head>
+<body class="hold-transition sidebar-mini">
+<div class="wrapper">
+  <!-- Navbar -->
+{% include "navbar.html" %}
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1>Prediction Pannel</h1>
+          </div>
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="#">Crop Selection</a></li>
+              <li class="breadcrumb-item active">Prediction</li>
+            </ol>
+          </div>
+        </div>
+      </div><!-- /.container-fluid -->
+    </section>
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
+        <!-- SELECT2 EXAMPLE -->
+        <div class="card card-default">
+          <div class="card-header">
+            <h2 class="card-title">Export the mean soil and environmental attributes you observed from the below eaverage readings table to the ML prediction model to get the best crop suggestion</h2>
+            <div class="card-tools">
+              <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                <i class="fas fa-minus"></i>
+              </button>
+              <button type="button" class="btn btn-tool" data-card-widget="remove">
+                <i class="fas fa-times"></i>
+              </button>
+            </div>
+          </div>
+          <!-- /.card-header -->
+          <div class="card-body">
+          <div class="row">
+           <div class="col-12 grid-margin">
+              <div class="card">
+                {%with messages = get_flashed_messages()%}
+
+    {%if messages%}
+
+    {% for message in messages %}
+
+    <div class="alert alert-success alert-dismissable" role="alert">
+
+     <button type="button" class="close" data-dismiss="alert" aria-label ="close">
+
+         <span aria-hidden="true">&times;</span>
+
+     </button>
+        {{message}}
+
+    </div>
+
+    {%endfor%}
+    {%endif%}
+    {%endwith%}
+
+
+                 <table id='table1' class='table table-bordered  table-hover'>
+                 <thead>
+                  <tr>
+                     <th>S/N            </th>
+                     <th>Temperature &#8451;</th>
+                     <th>Humidity   &percnt; </th>
+                     <th>Nitrogen   kg/ha </th>
+                     <th>Phosphorous kg/ha </th>
+                     <th>Potassium  kg/ha </th>
+                     <th>pH          </th>
+                     <th>Date            </th>
+                     <th>Actions          </th>
+                  </tr>
+               </thead>
+             <tbody>
+               {% for row in total_average %}
+                 <tr>
+                    <td>{{row[0]}}</td>
+                    <td>{{row[1]}}</td>
+                    <td>{{row[2]}}</td>
+                    <td>{{row[3]}}</td>
+                    <td>{{row[4]}}</td>
+                    <td>{{row[5]}}</td>
+                    <td>{{row[6]}}</td>
+                    <td>{{row[7]}}</td>
+                    <td>
+                    <a href="/update/{{row.0}}" class="btn btn-warning btn-md" data-toggle="modal" data-target="#modaledit{{row.0}}">Export to crop selection model</a>
+                    <a href="/delete_avg/{{ row.0 }}" class="btn btn-danger btn-md" onclick="return confirm('Are You Sure For Delete?')"><i class="fas fa-trash"></i></a></td>
+                  </tr>
+              <div id="modaledit{{row.0}}" class="modal fade" role="dialog">
+                <div class="modal-dialog">
+                 <div class="modal-content">
+                   <div class="modal-header">
+                   <h5 class="modal-title"> Hello dear famer! please hit the button to get your crop suggestion</h5>
+                </div>
+
+
+
+      <div class="modal-body mb-5">
+       <div class="card-body shadow-none p-3 mb-5 bg-dark">
+         <form method="POST" action="{{ url_for('predict')}}" class="mt-5">
+
+          <div class="row">
+           <div class="col-md-4">
+            <label for="Nitrogen">Nitrogen</label>
+             <input type="number" step="0.01" id="Nitrogen" name="Nitrogen" value="{{row.5}}" class="form-control" >
+         </div>
+
+         <div class="col-md-4">
+           <label for="Phosporus">Phosphorus</label>
+            <input type="number" step="0.01" id="Phosporus" name="Phosporus" value="{{row.4}}" class="form-control" >
+         </div>
+
+         <div class="col-md-4">
+            <label for="Potassium">Potassium</label>
+             <input type="number" step="0.01" id="Potassium" name="Potassium" value="{{row.3}}" class="form-control" >
+        </div>
+      </div>
+
+      <div class="row mt-4">
+        <div class="col-md-4">
+          <label for="Temperature">Temperature</label>
+            <input type="number" step="0.01" id="Temperature" name="Temperature" value="{{row.1}}" class="form-control" >
+        </div>
+
+        <div class="col-md-4">
+           <label for="Humidity">Humidity</label>
+            <input type="number" step="0.01" id="Humidity" name="Humidity" value="{{row.2}}" class="form-control" >
+        </div>
+
+        <div class="col-md-4">
+          <label for="pH">pH</label>
+            <input type="number" step="0.01" id="pH" name="pH" value="{{row.6}}" class="form-control" >
+        </div>
+        </div>
+
+      <div class="row mt-4">
+      <div class="col-md-12 text-center">
+        <button type="submit" class="btn btn-dark btn-lg">Get suggestion</button>
+      </div>
+      </div>
+    </form>
+        </div>
+         <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            {% endfor %}
+            </tbody>
+            </table>
+         </div>
+          </div>
+           <!-- <div class="col-12 grid-margin">
+              <div class="card shadow-lg p-3 mb-5 bg-white rounded">
+                <h>Dear Farmer, here is the list of sugested crops, arrenged by their priority based on available soil and  environmental wether requuirements.</h5>
+                <h6><b>Note:</b> the higher priority(%) the more suitable crop we suggest to grow.</h6>
+                 {% for crop, probability in sorted_crops %}
+                    <li>{{ crop }}: {{ probability|round(4) }}</li>
+                {% endfor %}
+              </div>
+            </div>
+            end suggestion-->
+             <div class="col-12 grid-margin">
+    <div class="card shadow-lg p-3 mb-5 bg-white rounded">
+        <h6>Dear Farmer, here is the list of suggested crops, ranked based on their growing probability regarding the available soil and weather requirements.</h6>
+        <h5 class="card-header bg-info text-center "><b>Note:The higher probability (%), the more suitable crop we suggest to grow.</b> </h5>
+        <ul>
+            {% for crop, probability in sorted_crops %}
+                <li style="list-style-type: none;  margin: 0; padding: 0;">
+                    <b>{{ crop }}</b>
+                    <div class="progress">
+                        <div   class="progress-bar progress-bar-striped progress-bar-animated {% if probability >= 0.20 %}bg-success{% elif probability >= 0.19 %}bg-info{% elif probability <= 0.8 %}bg-warning{% else %}bg-danger{% endif %}" role="progressbar " style="width: {{ probability * 100 }}%; border-radius: 7px;" aria-valuenow="{{ probability * 100 }}" aria-valuemin="0" aria-valuemax="100">
+                            {{ probability * 100 }}%</div>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+          </div>
+            <!-- /.row -->
+          </div>
+           <!-- /.card-header -->      
+          <!-- /.card-body -->
+          </div>
+        </div>
+        <!-- /.row -->
+      </div>
+      </div>
+        <!-- /.row -->
+      </div>
+      
+      <!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+{% include "footer.html" %}
+  <!-- Control Sidebar -->
+  <aside class="control-sidebar control-sidebar-dark">
+    <!-- Control sidebar content goes here -->
+  </aside>
+  <!-- /.control-sidebar -->
+</div>
+</div>
+<!-- ./wrapper--> 
+
+<!-- jQuery -->
+<script type="text/javascript" src="{{url_for('static', filename ='plugins/jquery/jquery.min.js')}}"></script>
+<!-- Bootstrap 4 -->
+<script type="text/javascript" src="{{url_for('static', filename ='/plugins/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
+<!-- Select2 -->
+<script type="text/javascript" src="{{url_for('static', filename ='plugins/select2/js/select2.full.min.js')}}"></script>
+<!-- Bootstrap4 Duallistbox -->
+<script type="text/javascript" src="{{url_for('static', filename ='plugins/bootstrap4-duallistbox/jquery.bootstrap-duallistbox.min.js')}}"></script>
+<!-- InputMask -->
+<script type="text/javascript" src="{{url_for('static', filename ='plugins/moment/moment.min.js')}}"></script>
+<script type="text/javascript" src="{{url_for('static', filename ='plugins/inputmask/jquery.inputmask.min.js')}}"></script>
+<!-- date-range-picker -->
+<script type="text/javascript" src="{{url_for('static', filename ='plugins/daterangepicker/daterangepicker.js')}}"></script>
+<!-- bootstrap color picker -->
+<script type="text/javascript" src="{{url_for('static', filename ='plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.min.js')}}"></script>
+<!-- Tempusdominus Bootstrap 4 -->
+<script type="text/javascript" src="{{url_for('static', filename ='plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js')}}"></script>
+<!-- Bootstrap Switch -->
+<script type="text/javascript" src="{{url_for('static', filename ='/plugins/bootstrap-switch/js/bootstrap-switch.min.js')}}"></script>
+<!-- BS-Stepper -->
+<script type="text/javascript" src="{{url_for('static', filename ='plugins/bs-stepper/js/bs-stepper.min.js')}}"></script>
+<!-- dropzonejs -->
+<script type="text/javascript" src="{{url_for('static', filename ='plugins/dropzone/min/dropzone.min.js')}}"></script>
+<!-- AdminLTE App -->
+<script type="text/javascript" src="{{url_for('static', filename ='dist/js/adminlte.min.js')}}"></script>
+<!-- AdminLTE for demo purposes -->
+<script type="text/javascript" src="{{url_for('static', filename ='dist/js/demo.js')}}"></script>
+<!-- Page specific script -->
+</body>
+</html>

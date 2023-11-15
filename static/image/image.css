@@ -1,0 +1,75 @@
+  <style>
+        body {
+            background-image: url({{url_for('static', filename='login_bg4.jpg')}}); /* Adjust the path accordingly */
+            background-size: cover; /* Adjust to your preference */
+            background-repeat: no-repeat;
+            background-attachment: fixed; /* Fixed background */
+        }
+        
+        /* Additional CSS for content styling */
+        .content {
+            padding: 20px;
+            color: white;
+        }
+        .card-body {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 25rem;
+  padding: 2.5rem;
+  box-sizing: border-box;
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 0.625rem;
+}
+
+.card-body h4 {
+  margin: 0 0 1.875rem;
+  padding: 0;
+  color: #fff;
+  text-align: center;
+}
+
+.card-body .input-group {
+  position: relative;
+}
+
+.card-body .input-group  input {
+  width: 100%;
+  padding: 0.625rem 0;
+  font-size: 1rem;
+  color: #fff;
+  letter-spacing: 0.062rem;
+  margin-bottom: 1.875rem;
+  border: none;
+  border-bottom: 0.065rem solid #fff;
+  outline: none;
+  background: transparent;
+}
+
+.card-body .input-group label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 0.625rem 0;
+  font-size: 1rem;
+  color: #fff;
+  pointer-events: none;
+  transition: 0.5s;
+}
+
+.card-body input[type="submit"] {
+  border: none;
+  outline: none;
+  color: #fff;
+  background-color: #03a9f4;
+  padding: 0.625rem 1.25rem;
+  cursor: pointer;
+  border-radius: 0.312rem;
+  font-size: 1rem;
+}
+
+.card-body input[type="submit"]:hover {
+  background-color: #1cb1f5;
+}
+    </style>
