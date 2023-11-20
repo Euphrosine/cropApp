@@ -1,10 +1,10 @@
 <?php
 session_start();
 // Connection credentials.
-$DATABASE_HOST = 'mysql-153418-0.cloudclusters.net';
-$DATABASE_USER = 'admin';
-$DATABASE_PASS = 'admin123';
-$DATABASE_NAME = 'crop';
+$DATABASE_HOST = 'localhost';
+$DATABASE_USER = 'u191905341_crops_user';
+$DATABASE_PASS = 'Crops_user27';
+$DATABASE_NAME = 'u191905341_crops';
 // Try and connect using the info above.
 $conn = new mysqli($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME);
 // Check connection
