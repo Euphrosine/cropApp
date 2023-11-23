@@ -1,7 +1,9 @@
 from flask import Flask, render_template, request, redirect, url_for, flash,session,jsonify
 from flask_mysqldb import MySQL
+from mysql.connector import connect
+from mysql.connector import Error
 import hashlib
-import MySQLdb.cursors
+# import MySQLdb.cursors
 import matplotlib.pyplot as plt
 import io
 import base64
@@ -20,11 +22,14 @@ app = Flask(__name__)
 #Secure the session data saved in browser
 app.secret_key = 'many random bytes'
 #Start database connection
-app.config['MYSQL_HOST'] = 'mysql-153418-0.cloudclusters.net'
-app.config['MYSQL_USER'] = 'admin'
-app.config['MYSQL_PASSWORD'] = 'admin123'
-app.config['MYSQL_DB'] = 'crop'  
-app.config['MYSQL_DB'] = '19069'
+# app.config['MYSQL_HOST'] = 'mysql-153418-0.cloudclusters.net'
+# app.config['MYSQL_USER'] = 'admin'
+# app.config['MYSQL_PASSWORD'] = 'admin123'
+# app.config['MYSQL_DB'] = 'crop'  
+# app.config['MYSQL_DB'] = '19069'
+connection = connect(host='mysql-153418-0.cloudclusters.net', user='admin', password='admin123', database='crop', port=19069)
+cursor = connection.cursor()
+
 mysql = MySQL(app)
 #End database connection
 
